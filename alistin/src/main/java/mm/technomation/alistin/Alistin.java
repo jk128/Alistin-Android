@@ -19,12 +19,12 @@ public class Alistin {
     private byte[] emptySound = {60, -26, 105, 109, -32, -52, -63, -125, -64, -114, 80, 122, -62, 18, 116, 80, -64, 0, 54, -34, -66, 60, -101, 24, 0, 4, -118, 2, 17, 113, 26, 64, 60, 32, 100, 121, -99, -26, 28, 5, -32, 31, 66, -38, 82, -42, -26, -127, -50, -47, 123, -38, 59, -20, 22, 87, -14, -98, 19, 24, 37, 74, 18, -112, 60, 26, 114, 99, 85, -14, -84, 10, 64, 82, 117, -102, -3, 37, -41, 110, -7, -102, 64, 13, -56, -34, -79, 52, -70, 9, 90, -24, 92, 104, 5, 16, 60, -34, 92, -123, -111, -11, -32, -127, 96, -108, -89, -22, -125, -20, -104, -67, -15, -4, 114, 115, 19, 70, -87, 83, -23, 85, -127, 119, -65, -36, 62, -64, 60, 20, 127, 95, 70, -93, -88, -124, 97, 45, -32, -118, -120, 9, 120, -67, -35, -26, 59, 15, 70, -103, 78, -78, -124, 50, 40, 108, -16, 51, -40, 0, 60, -32, 86, -125, 67, 81, 96, 9, 0, 28, -29, -22, 123, 111, 82, -119, -43, 37, -30, 115, -61, 44, 40, 113, -28, -16, 86, 119, -37, -82, 20, 64, 60, 53, 5, 87, -115, -38, -40, 1, -31, 15, -90, -81, 107, 41, -82, 48, -88, 84, 27, 38, 59, 17, 107, -72, 103, -44, 91, 86, 77, 107, 115, -128, 60, 26, 93, 109, -114, -84, -38, 0, 64, 89, -90, -53, -47, 40, -71, 42, 81, -66, 114, -74, -65, 32, 84, 98, -128, 18, 25, 53, -26, 4, -123, 64, 60, 68, 112, 116, -118, -46, -127, 1, 65, 14, -106, -103, 85, 24, 49, 16, -3, 80, -72, 86, -4, -11, 41, 42, 44, -44, -47, -36, 43, -97, 56, -64, 60, 6, 103, 103, -114, 23, 0, 1, 32, -61, -90, -104, 72, 96, -87, -77, 14, -21, 103, -120, -91, -31, 3, -3, -47, -6, -76, 39, 50, -117, 74, -64, 60, 66, 110, 99, 65, -5, 40, 3, -128, 120, 78, 90, 112, 38, -106, 16, -60, -1, 0, 34, 72, 10, -48, 47, -71, 15, -51, -73, 61, 68, -68, 0, 60, -32, 92, -128, -117, -72, 74, 3, 64, 91, -56, -86, 80, -122, 102, -48, -22, 48, -112, 12, 24, -26, -16, -101, -54, -69, 118, 60, -1, 4, 82, -96, 60, 30, 118, 100, -118, -68, -14, 5, 1, 44, -9, -102, -80, -84, 124, 102, -6, -92, -81, -68, 13, -39, -87, 10, 110, 17, -46, -65, -114, -79, -17, -64, 60, 26, 84, -123, 49, 124, 122, 4, 64, 83, -13, -6, -60, -40, 106, 47, -13, -86, 68, -57, 110, -3, 95, -108, -59, -41, 54, -85, -119, 103, -93, 96, 60, -40, 102, 118, 77, 34, -16, 24, -96, -109, -103, -54, 114, -94, 120, 29, -126, -37, -124, -11, 123, 70, 113, 51, -122, 114, 102, -40, 40, 13, 80, -128, 60, 12, 111, 119, -107, 115, -103, 0, -96, -106, -45, -55, 122, -86, 106, -56, -27, 62, -39, 84, 43, 42, -48, 83, 59, 47, 115, 26, 61, 4, 91, 64};
 
     private ArrayList<Byte> tempBytes = new ArrayList<>();
-    private byte[] allbytes;
 
     private static String root = "CoreSpeech/";
 
     /**
      * Constructor for Alistin
+     *
      * @param context Context for Alistin
      */
     public Alistin(Context context) {
@@ -48,6 +48,7 @@ public class Alistin {
 
     /**
      * start the tts to speak
+     *
      * @param paragraph text to read in Myanmar Unicode String
      */
     public void speak(String paragraph) {
@@ -113,15 +114,14 @@ public class Alistin {
     MediaPlayer mp = null;
 
     private void createFile() {
-        allbytes = new byte[tempBytes.size()];
+        byte[] allBytes = new byte[tempBytes.size()];
         for (int i = 0; i < tempBytes.size(); i++) {
-            allbytes[i] = tempBytes.get(i);
+            allBytes[i] = tempBytes.get(i);
         }
         try {
-
             FileOutputStream outputStream = context.openFileOutput("sound.amr", Context.MODE_PRIVATE);
             outputStream.write(headers);
-            outputStream.write(allbytes);
+            outputStream.write(allBytes);
             outputStream.close();
 
             if (mp != null) {
@@ -137,9 +137,51 @@ public class Alistin {
 
     private void playWords() {
         for (String word : words) {
-            playAWord(word);
+            boolean isNumber = false;
+            for (int i = 0; i < word.length(); i++) {
+                if (!(4160 <= word.charAt(i) && word.charAt(i) <= 4169)) {
+                    isNumber = false;
+                    break;
+                }
+                isNumber = true;
+            }
+
+            if (isNumber) {
+                numWords.clear();
+                playNumber(word);
+                for (String numWord : numWords) {
+                    playAWord(numWord);
+                }
+
+            } else {
+                playAWord(word);
+            }
         }
         createFile();
+    }
+
+    private ArrayList<String> numWords = new ArrayList<>();
+    private boolean toAdd = false;
+
+    private void playNumber(String word) {
+        String[] ex = {"ဆယ်", "ရာ", "ထောင်", "သောင်း", "သိန်း", "သန်း"};
+        if (word.length() > 7) {
+            toAdd = true;
+            playNumber(word.substring(0, word.length() - 6));
+            word = word.substring(word.length() - 6);
+        }
+        for (int i = 0; i < word.length(); i++) {
+            if (word.charAt(i) != '၀') {
+                numWords.add(word.charAt(i) + "");
+                if (word.length() - i - 2 >= 0) {
+                    numWords.add(ex[word.length() - i - 2]);
+                }
+            }
+        }
+        if (toAdd) {
+            numWords.add(ex[ex.length - 1]);
+            toAdd = !toAdd;
+        }
     }
 
     private void playAWord(String word) {
@@ -312,7 +354,7 @@ public class Alistin {
                 returnSt += st.charAt(i);
             } else if ((4096 <= st.charAt(i) && st.charAt(i) <= 4129 && i + 1 < st.length() && st.charAt(i + 1) != 4154) || alak.contains(st.charAt(i))) {
                 returnSt += " " + st.charAt(i);
-            } else if (4160 <= st.charAt(i) && st.charAt(i) <= 4169) {
+            } else if (4160 <= st.charAt(i) && st.charAt(i) <= 4169 && i != 0 && !(4160 <= st.charAt(i - 1) && st.charAt(i - 1) <= 4169)) {
                 returnSt += " " + st.charAt(i);
             } else if (4096 <= st.charAt(i) && st.charAt(i) <= 4129 && i + 1 == st.length()) {
                 returnSt += " " + st.charAt(i);
@@ -328,6 +370,7 @@ public class Alistin {
         returnSt = returnSt.replaceAll("့်", "့်");
         returnSt = returnSt.replaceAll("\u104A", " \u104A");
         returnSt = returnSt.replaceAll("\u104B", " \u104B");
+
         return returnSt + " ";
     }
 

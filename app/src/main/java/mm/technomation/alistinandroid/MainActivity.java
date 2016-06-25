@@ -2,7 +2,6 @@ package mm.technomation.alistinandroid;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -23,11 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void play(View v) {
         String s = ((EditText) findViewById(R.id.etParagraph)).getText().toString() + "";
-        try {
-            alistin.speak(s);
-        } catch (Exception e) {
-            Log.e("Error", e.toString());
-        }
+        alistin.speak(s);
     }
 
     public void stop(View v) {
