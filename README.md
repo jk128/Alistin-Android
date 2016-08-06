@@ -8,7 +8,7 @@ The original project can be found <a href="https://github.com/htoomyintnaung/ali
 It's very simple. Create a new Alistin Object and use speak(String paragraph) method to read the text.
 <br />
 ```java
-Alistin alistin = new Alistin(getApplicationContext());\n
+Alistin alistin = new Alistin(getApplicationContext());
 alistin.speak("ကျေးဇူးတင်ပါတယ်");
 ```
 Download and compile sample project for more details.
